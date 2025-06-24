@@ -1,15 +1,19 @@
 import hashlib
 import subprocess
 import sys
+import os
+import re
+from collections import defaultdict
 
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
 from configuracion import PATHS, EMAIL, ESCANEO
-
-sys.path.append(PATHS['utils'])
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
 
 # Ruta al archivo hash almacenado encriptado
-HASH_ARCHIVO = "/var/secure_hashes_mount/hashes_shadow.txt"
+HASH_ARCHIVO = "/home/fedealon/Desktop/Proyecto-HIPS/config/hashes.txt"
 
 def obtener_hash_actual():
     try:
@@ -46,7 +50,7 @@ def verificar_integridad():
 
 def enviar_mail(mensaje):
     enviar_alerta(
-        destinatario=EMAIL['destinatario']
+        destinatario=EMAIL['destinatario'],
         asunto="🚨 Alerta HIPS: Modificación en archivo crítico",
         cuerpo=mensaje
     )

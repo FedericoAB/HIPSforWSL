@@ -2,9 +2,19 @@ import os
 import subprocess
 import sys
 
-from configuracion import PATHS, EMAIL, ESCANEO
+import sys
+import os
+import subprocess
+import re
+from collections import defaultdict
 
-sys.path.append(PATHS['utils']) 
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
+from configuracion import PATHS, EMAIL, ESCANEO 
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -19,7 +29,7 @@ def revisar_lineas_cron(lineas, fuente):
             if ruta in linea:
                 cuerpo = registrar_alarma("Tarea cron sospechosa", "-", f"{linea.strip()} [{fuente}]")
                 enviar_alerta(
-                    destinatario=EMAIL['destinatario']
+                    destinatario=EMAIL['destinatario'],
                     asunto="🚨 Alerta HIPS: Cron sospechoso",
                     cuerpo=cuerpo
                 )

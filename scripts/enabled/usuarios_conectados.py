@@ -1,9 +1,12 @@
 import subprocess
 import sys
-
+import os
+import re
+from collections import defaultdict
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
 from configuracion import PATHS, EMAIL, ESCANEO
-
-sys.path.append(PATHS['utils'])
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -21,7 +24,7 @@ def obtener_conexiones_remotas():
                     ip = partes[2]
                     cuerpo = registrar_alarma("Conexión remota detectada (w)", ip, f"Usuario: {usuario}")
                     enviar_alerta(
-                        destinatario=EMAIL['destinatario']
+                        destinatario=EMAIL['destinatario'],
                         asunto="🚨 Alerta HIPS: Usuario conectado remotamente (w)",
                         cuerpo=cuerpo
                     )

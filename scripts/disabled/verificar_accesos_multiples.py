@@ -2,11 +2,11 @@ import subprocess
 import re
 from collections import defaultdict
 import sys
-
+import os
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
 from configuracion import PATHS, EMAIL, ESCANEO
-
-sys.path.append(PATHS['utils'])
-
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
 
@@ -36,7 +36,7 @@ def detectar_accesos_repetidos():
             if count >= UMBRAL_IP:
                 cuerpo = registrar_alarma("Accesos fallidos desde IP repetida", ip, f"{count} intentos fallidos")
                 enviar_alerta(
-                    destinatario=EMAIL['destinatario']
+                    destinatario=EMAIL['destinatario'],
                     asunto="🚨 Alerta HIPS: IP con múltiples intentos de acceso",
                     cuerpo=cuerpo
                 )
@@ -45,7 +45,7 @@ def detectar_accesos_repetidos():
             if count >= UMBRAL_USUARIO:
                 cuerpo = registrar_alarma("Accesos fallidos al usuario", "-", f"{user} recibió {count} intentos")
                 enviar_alerta(
-                    destinatario=EMAIL['destinatario']
+                    destinatario=EMAIL['destinatario'],
                     asunto="🚨 Alerta HIPS: Usuario atacado repetidamente",
                     cuerpo=cuerpo
                 )

@@ -1,9 +1,16 @@
 import os
 import subprocess
 import sys
-from configuracion import PATHS, EMAIL, ESCANEO
+import re
+from collections import defaultdict
 
-sys.path.append(PATHS['utils'])
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
+from configuracion import PATHS, EMAIL, ESCANEO
 
 
 from enviar_mail import enviar_alerta
@@ -22,7 +29,7 @@ def detectar_y_prevenir_sniffers():
             if nombre in sniffers:
                 cuerpo = registrar_alarma("Sniffer Detectado", "-", f"Proceso: {nombre}")
                 enviar_alerta(
-                    destinatario=EMAIL['destinatario']
+                    destinatario=EMAIL['destinatario'],
                     asunto="🚨 Alerta HIPS: Sniffer Detectado",
                     cuerpo=cuerpo
                 )

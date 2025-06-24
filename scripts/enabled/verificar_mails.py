@@ -2,10 +2,11 @@ import subprocess
 import re
 from collections import defaultdict
 import sys
-
+import os
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
 from configuracion import PATHS, EMAIL, ESCANEO
-
-sys.path.append(PATHS['utils'])
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -33,8 +34,7 @@ def analizar_mails_desde_journal():
 
         if resumen:
             enviar_alerta(
-                destinatario=EMAIL['destinatario']
-",
+                destinatario=EMAIL['destinatario'],
                 asunto="🚨 Alerta HIPS: Actividad de correo sospechosa",
                 cuerpo=f"Se detectaron usuarios con envío excesivo de mails:\n\n{resumen}"
             )

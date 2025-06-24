@@ -1,10 +1,14 @@
 import os
 import shutil
 import sys
+import subprocess
+import re
+from collections import defaultdict
 
-from configuracion import PATHS, EMAIL, ESCANEO
-
-sys.path.append(PATHS['utils'])  # Ajustar si tu usuario no es kali
+UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
+if UTILS_PATH not in sys.path:
+    sys.path.append(UTILS_PATH)
+from configuracion import PATHS, EMAIL, ESCANEO  # Ajustar si tu usuario no es kali
 
 from registrar_log import registrar_alarma, registrar_prevencion
 from enviar_mail import enviar_alerta
@@ -32,7 +36,7 @@ def analizar_tmp():
                     if archivo.endswith(ext):
                         cuerpo = registrar_alarma("Archivo sospechoso en /tmp", "-", f"Archivo: {archivo}")
                         enviar_alerta(
-                            destinatario=EMAIL['destinatario']
+                            destinatario=EMAIL['destinatario'],
                             asunto="🚨 Alerta HIPS: Archivo sospechoso en /tmp",
                             cuerpo=cuerpo
                         )

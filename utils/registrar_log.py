@@ -1,8 +1,7 @@
 import datetime
-
-# Ruta fija del directorio de logs
-RUTA_ALARMAS = '/var/log/hips/alarmas.log'
-RUTA_PREVENCION = '/var/log/hips/prevencion.log'
+from configuracion import PATHS
+RUTA_ALARMAS = PATHS['log_alarmas']
+RUTA_PREVENCION = PATHS['log_prevencion']
 
 def registrar_alarma(tipo_alarma, ip='-', detalle=''):
     timestamp = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
