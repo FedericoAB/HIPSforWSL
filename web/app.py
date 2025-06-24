@@ -157,7 +157,6 @@ def ver_alarmas():
     
     # Buscar en múltiples ubicaciones
     posibles_rutas = [
-        '/var/log/hips/alarmas.log',
         '/home/fedealon/Desktop/Proyecto-HIPS/alarmas.log',
         PATHS.get('log_alarmas', '')
     ]
@@ -184,7 +183,6 @@ def ver_prevencion():
     
     # Buscar en múltiples ubicaciones
     posibles_rutas = [
-        '/var/log/hips/prevencion.log',
         '/home/fedealon/Desktop/Proyecto-HIPS/prevencion.log',
         PATHS.get('log_prevencion', '')
     ]
@@ -213,7 +211,6 @@ def graficos():
     
     # Buscar archivo de alarmas
     posibles_rutas = [
-        '/var/log/hips/alarmas.log',
         '/home/fedealon/Desktop/Proyecto-HIPS/alarmas.log',
         PATHS.get('log_alarmas', '')
     ]
@@ -275,7 +272,6 @@ def correos():
 
     historial = []
     posibles_rutas = [
-        '/var/log/hips/alarmas.log',
         '/home/fedealon/Desktop/Proyecto-HIPS/alarmas.log',
         PATHS.get('log_alarmas', '')
     ]

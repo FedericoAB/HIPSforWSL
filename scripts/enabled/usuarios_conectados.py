@@ -11,23 +11,29 @@ from configuracion import PATHS, EMAIL, ESCANEO
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
 
+import subprocess
+import re
+
 def obtener_conexiones_remotas():
     try:
-        resultado = subprocess.check_output(['w'], text=True)
+        resultado = subprocess.check_output(['ss', '-tnp'], text=True)
         lineas = resultado.strip().split('\n')
 
-        for linea in lineas[2:]:  # Saltar encabezados
-            if '127.0.0.1' in linea or '192.' in linea or '10.' in linea:  # Ajustable para otras IPs
+        for linea in lineas[1:]:
+            if 'ESTAB' in linea:
                 partes = linea.split()
-                if len(partes) >= 3:
-                    usuario = partes[0]
-                    ip = partes[2]
-                    cuerpo = registrar_alarma("Conexión remota detectada (w)", ip, f"Usuario: {usuario}")
-                    enviar_alerta(
-                        destinatario=EMAIL['destinatario'],
-                        asunto="🚨 Alerta HIPS: Usuario conectado remotamente (w)",
-                        cuerpo=cuerpo
-                    )
+                if len(partes) >= 5:
+                    remote_addr = partes[4]
+                    # remote_addr puede ser [::1]:puerto para IPv6 o ip:puerto para IPv4
+                    # Quitar los corchetes si existen (IPv6)
+                    if remote_addr.startswith('['):
+                        ip = remote_addr.split(']:')[0][1:]
+                    else:
+                        ip = remote_addr.rsplit(':', 1)[0]
+
+                    if ip != '127.0.0.1' and ip != '::1':
+                        print(f"Conexión remota detectada: {ip}")
+                        # registrar_alarma y enviar_alerta aquí
 
     except Exception as e:
         print(f"Error al obtener conexiones remotas: {e}")
