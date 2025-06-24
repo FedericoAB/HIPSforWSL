@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel HIPS</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #00ff88;
+            color: #000;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #00ff88;
+            margin-bottom: 30px;
+        }
+
+        .opciones {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .opciones a {
+            background-color: #2c2c2c;
+            color: #00ff88;
+            padding: 15px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+            transition: 0.2s ease;
+            font-weight: bold;
+        }
+
+        .opciones a:hover {
+            background-color: #00ff88;
+            color: #000;
+        }
+
+        .logout {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .logout a {
+            color: #ff4d4d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Panel de Administración HIPS</h1>
+    </div>
+    <div class="container">
+        <h2>Opciones disponibles</h2>
+        <div class="opciones">
+            <a href="/ver_alarmas">📄 Ver Alarmas</a>
+            <a href="/ver_prevencion">🛡️ Ver Prevenciones</a>
+	    <a href="/modulos">⚙️ Control de Módulos</a>
+            <a href="/graficos" target="_blank">📊 Ver Gráfico de Actividad</a>
+            <a href="/correos">📬 Correos Enviados</a>
+            <a href="/scripts">🖥 Ejecutar Scripts</a>
+
+        </div>
+        <div class="logout">
+            <a href="/logout">⏏️ Cerrar sesión</a>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center text-green-500">⚙ Gestión de Módulos del HIPS</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-800 p-4 mb-2 rounded shadow">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div>
+            <h2 class="text-xl text-green-400 font-semibold mb-3">🟢 Módulos Activos</h2>
+            {% for script in activos %}
+                <form method="POST">
+                    <input type="hidden" name="script" value="{{ script }}">
+                    <input type="hidden" name="action" value="desactivar">
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow-md w-full mb-2">
+                        🔻 Desactivar {{ script }}
+                    </button>
+                </form>
+            {% else %}
+                <p class="text-sm text-gray-400">No hay módulos activos.</p>
+            {% endfor %}
+        </div>
+
+        <div>
+            <h2 class="text-xl text-yellow-300 font-semibold mb-3">🟡 Módulos Inactivos</h2>
+            {% for script in inactivos %}
+                <form method="POST">
+                    <input type="hidden" name="script" value="{{ script }}">
+                    <input type="hidden" name="action" value="activar">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow-md w-full mb-2">
+                        🔺 Activar {{ script }}
+                    </button>
+                </form>
+            {% else %}
+                <p class="text-sm text-gray-400">No hay módulos inactivos.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mt-8 text-center">
+        <a href="{{ url_for('dashboard') }}" class="text-blue-400 hover:underline text-sm">⬅ Volver al dashboard</a>
+    </div>
+</div>
+{% endblock %}

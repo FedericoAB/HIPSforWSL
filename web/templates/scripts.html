@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-2xl font-bold text-center mb-8 text-green-400">📜 Ejecutar Scripts del Sistema</h2>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="mb-6">
+      {% for message in messages %}
+        <div style="background-color: #2e2e2e; border-left: 4px solid #00ff88; padding: 10px; margin-bottom: 10px; border-radius: 6px;">
+          <pre style="margin: 0; color: #ccffcc;">{{ message }}</pre>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<form method="POST" action="{{ url_for('ejecutar_script') }}">
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+    {% for script in scripts %}
+      <button type="submit" name="script" value="{{ script }}"
+        style="background-color: #00cc66; color: white; font-weight: bold; padding: 12px 24px; border: none;
+               border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s;">
+        ▶ Ejecutar {{ script }}
+      </button>
+    {% endfor %}
+  </div>
+</form>
+
+<div style="text-align: center; margin-top: 30px;">
+  <a href="{{ url_for('dashboard') }}" style="color: #00ff88;">⬅ Volver al dashboard</a>
+</div>
+{% endblock %}
+

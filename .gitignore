@@ -1,0 +1,6 @@
+*.pyc
+__pycache__/
+*.log
+*.env
+/secure_hashes_mount/
+/secure_hashes_encrypted/

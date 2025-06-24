@@ -1,0 +1,13 @@
+{
+    "detectar_sniffers": true,
+    "verificar_tmp": true,
+    "verificar_archivos": true,
+    "usuarios_conectados": true,
+    "verificar_accesos_fallidos": true,
+    "verificar_logs_http": true,
+    "verificar_mails": true,
+    "verificar_memoria": true,
+    "verificar_cron": true,
+    "verificar_ddos": true,
+    "verificar_accesos_multiples": true
+}

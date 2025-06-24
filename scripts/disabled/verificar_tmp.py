@@ -1,0 +1,44 @@
+import os
+import shutil
+import sys
+
+sys.path.append('/home/kali/hips/utils')  # Ajustar si tu usuario no es kali
+
+from registrar_log import registrar_alarma, registrar_prevencion
+from enviar_mail import enviar_alerta
+
+# Extensiones sospechosas
+extensiones = ['.sh', '.py', '.php', '.pl', '.exe']
+
+# Ruta del directorio a inspeccionar
+directorio_tmp = '/tmp'
+cuarentena = '/tmp_cuarentena'
+
+def mover_a_cuarentena(ruta):
+    if not os.path.exists(cuarentena):
+        os.makedirs(cuarentena)
+    destino = os.path.join(cuarentena, os.path.basename(ruta))
+    shutil.move(ruta, destino)
+    return destino
+
+def analizar_tmp():
+    try:
+        for archivo in os.listdir(directorio_tmp):
+            ruta = os.path.join(directorio_tmp, archivo)
+            if os.path.isfile(ruta):
+                for ext in extensiones:
+                    if archivo.endswith(ext):
+                        cuerpo = registrar_alarma("Archivo sospechoso en /tmp", "-", f"Archivo: {archivo}")
+                        enviar_alerta(
+                            destinatario="federi.al2001@gmail.com",
+                            asunto="🚨 Alerta HIPS: Archivo sospechoso en /tmp",
+                            cuerpo=cuerpo
+                        )
+                        nuevo_destino = mover_a_cuarentena(ruta)
+                        registrar_prevencion("Archivo movido a cuarentena", "-", f"{nuevo_destino}")
+                        break
+    except Exception as e:
+        print(f"Error al analizar /tmp: {e}")
+
+if __name__ == "__main__":
+    analizar_tmp()
