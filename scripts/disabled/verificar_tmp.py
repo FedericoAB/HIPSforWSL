@@ -2,7 +2,9 @@ import os
 import shutil
 import sys
 
-sys.path.append('/home/kali/hips/utils')  # Ajustar si tu usuario no es kali
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils'])  # Ajustar si tu usuario no es kali
 
 from registrar_log import registrar_alarma, registrar_prevencion
 from enviar_mail import enviar_alerta
@@ -30,7 +32,7 @@ def analizar_tmp():
                     if archivo.endswith(ext):
                         cuerpo = registrar_alarma("Archivo sospechoso en /tmp", "-", f"Archivo: {archivo}")
                         enviar_alerta(
-                            destinatario="federi.al2001@gmail.com",
+                            destinatario=EMAIL['destinatario']
                             asunto="🚨 Alerta HIPS: Archivo sospechoso en /tmp",
                             cuerpo=cuerpo
                         )

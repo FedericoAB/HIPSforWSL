@@ -2,7 +2,9 @@ import hashlib
 import subprocess
 import sys
 
-sys.path.append('/home/kali/hips/utils')
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils'])
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
 
@@ -44,7 +46,7 @@ def verificar_integridad():
 
 def enviar_mail(mensaje):
     enviar_alerta(
-        destinatario="federi.al2001@gmail.com",
+        destinatario=EMAIL['destinatario']
         asunto="🚨 Alerta HIPS: Modificación en archivo crítico",
         cuerpo=mensaje
     )

@@ -2,7 +2,9 @@ import os
 import subprocess
 import sys
 
-sys.path.append('/home/kali/hips/utils') 
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils']) 
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -17,7 +19,7 @@ def revisar_lineas_cron(lineas, fuente):
             if ruta in linea:
                 cuerpo = registrar_alarma("Tarea cron sospechosa", "-", f"{linea.strip()} [{fuente}]")
                 enviar_alerta(
-                    destinatario="federi.al2001@gmail.com",
+                    destinatario=EMAIL['destinatario']
                     asunto="🚨 Alerta HIPS: Cron sospechoso",
                     cuerpo=cuerpo
                 )

@@ -1,8 +1,10 @@
 import os
 import subprocess
 import sys
+from configuracion import PATHS, EMAIL, ESCANEO
 
-sys.path.append('/home/kali/hips/utils')  # Ajustá si tu usuario no es kali
+sys.path.append(PATHS['utils'])
+
 
 from enviar_mail import enviar_alerta
 from registrar_log import registrar_alarma, registrar_prevencion
@@ -20,7 +22,7 @@ def detectar_y_prevenir_sniffers():
             if nombre in sniffers:
                 cuerpo = registrar_alarma("Sniffer Detectado", "-", f"Proceso: {nombre}")
                 enviar_alerta(
-                    destinatario="federi.al2001@gmail.com",
+                    destinatario=EMAIL['destinatario']
                     asunto="🚨 Alerta HIPS: Sniffer Detectado",
                     cuerpo=cuerpo
                 )

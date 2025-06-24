@@ -3,7 +3,9 @@ import re
 from collections import defaultdict
 import sys
 
-sys.path.append('/home/kali/hips/utils')
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils'])
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -31,7 +33,8 @@ def analizar_mails_desde_journal():
 
         if resumen:
             enviar_alerta(
-                destinatario="federi.al2001@gmail.com",
+                destinatario=EMAIL['destinatario']
+",
                 asunto="🚨 Alerta HIPS: Actividad de correo sospechosa",
                 cuerpo=f"Se detectaron usuarios con envío excesivo de mails:\n\n{resumen}"
             )

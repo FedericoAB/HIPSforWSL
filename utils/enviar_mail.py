@@ -5,7 +5,8 @@ from email.mime.multipart import MIMEMultipart
 def enviar_alerta(destinatario, asunto, cuerpo):
     # Configurar cuenta
     remitente = "federi.al2001@gmail.com"
-    contraseña = "adminhips2025" 
+    contraseña = "iukn jaja eybj wuzx" 
+    #OJO ES RE INSEGURO DEJAR ESTO ACA, peligroso, no subir 
 
     # Crear mensaje
     mensaje = MIMEMultipart()

@@ -1,7 +1,9 @@
 import subprocess
 import sys
 
-sys.path.append('/home/kali/hips/utils')
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils'])
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -19,7 +21,7 @@ def obtener_conexiones_remotas():
                     ip = partes[2]
                     cuerpo = registrar_alarma("Conexión remota detectada (w)", ip, f"Usuario: {usuario}")
                     enviar_alerta(
-                        destinatario="federi.al2001@gmail.com",
+                        destinatario=EMAIL['destinatario']
                         asunto="🚨 Alerta HIPS: Usuario conectado remotamente (w)",
                         cuerpo=cuerpo
                     )

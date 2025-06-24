@@ -2,7 +2,9 @@ import re
 from collections import defaultdict
 import sys
 
-sys.path.append('/home/kali/hips/utils')
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils'])
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -26,7 +28,7 @@ def analizar_log_http():
             if cantidad >= UMBRAL:
                 cuerpo = registrar_alarma("Errores HTTP desde IP", ip, f"{cantidad} errores 403/404")
                 enviar_alerta(
-                    destinatario="federi.al2001@gmail.com",
+                    destinatario=EMAIL['destinatario']
                     asunto="🚨 Alerta HIPS: Ataques web sospechosos",
                     cuerpo=cuerpo
                 )

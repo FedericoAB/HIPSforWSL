@@ -2,7 +2,9 @@ import re
 from collections import defaultdict
 import sys
 
-sys.path.append('/home/kali/hips/utils')
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils'])
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -25,7 +27,7 @@ def detectar_ddos():
             if cantidad >= UMBRAL:
                 cuerpo = registrar_alarma("Posible DDoS", ip, f"{cantidad} solicitudes DNS")
                 enviar_alerta(
-                    destinatario="federi.al2001@gmail.com",
+                    destinatario=EMAIL['destinatario']
                     asunto="🚨 Alerta HIPS: Ataque DDoS detectado",
                     cuerpo=cuerpo
                 )

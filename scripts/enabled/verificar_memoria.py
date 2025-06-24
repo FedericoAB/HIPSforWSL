@@ -2,7 +2,9 @@ import psutil
 import os
 import sys
 
-sys.path.append('/home/kali/hips/utils') 
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils']) 
 
 from registrar_log import registrar_alarma, registrar_prevencion
 from enviar_mail import enviar_alerta
@@ -20,7 +22,7 @@ def detectar_ram_excesiva():
                 detalle = f"{nombre} (PID: {pid}) usando {memoria:.2f}% RAM"
                 cuerpo = registrar_alarma("RAM excesiva", "-", detalle)
                 enviar_alerta(
-                    destinatario="federi.al2001@gmail.com",
+                    destinatario=EMAIL['destinatario']
                     asunto="🚨 Alerta HIPS: Uso excesivo de RAM",
                     cuerpo=cuerpo
                 )

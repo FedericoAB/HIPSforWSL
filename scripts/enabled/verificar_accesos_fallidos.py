@@ -3,7 +3,9 @@ import sys
 import re
 from datetime import datetime
 
-sys.path.append('/home/kali/hips/utils') 
+from configuracion import PATHS, EMAIL, ESCANEO
+
+sys.path.append(PATHS['utils']) 
 
 from registrar_log import registrar_alarma
 from enviar_mail import enviar_alerta
@@ -24,7 +26,7 @@ def obtener_intentos_fallidos():
                     if ip not in ips_detectadas:
                         cuerpo = registrar_alarma("Intento fallido de acceso", ip, "SSH - Failed password")
                         enviar_alerta(
-                            destinatario="federi.al2001@gmail.com",
+                            destinatario=EMAIL['destinatario']
                             asunto="🚨 Alerta HIPS: Intento fallido de acceso",
                             cuerpo=cuerpo
                         )
