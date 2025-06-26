@@ -5,6 +5,7 @@ import sys
 import subprocess
 import io
 import datetime
+from functools import wraps
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils')))
 
@@ -16,6 +17,15 @@ from registrar_log import registrar_alarma, registrar_prevencion
 print("DEBUG: registrar_alarma cargado desde:", registrar_alarma.__code__.co_filename)
 
 MODULOS_PATH = PATHS['modulos']
+
+def login_requerido(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if 'usuario' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return wrapper
+
 
 def cargar_modulos():
     try:
@@ -47,12 +57,14 @@ def necesita_sudo(nombre_script):
     return nombre_script in SCRIPTS_REQUIEREN_SUDO
 
 @app.route('/scripts')
+@login_requerido
 def mostrar_scripts():
     scripts_dir = SCRIPTS['enabled']
     scripts = [f for f in os.listdir(scripts_dir) if f.endswith('.py')]
     return render_template('scripts.html', scripts=scripts)
 
 @app.route('/ejecutar_script', methods=['POST'])
+@login_requerido
 def ejecutar_script():
     if 'usuario' not in session:
         return redirect(url_for('login'))
@@ -124,6 +136,7 @@ def test_dependencies():
                          verificaciones=verificaciones)
 
 @app.route('/')
+@login_requerido
 def index():
     if 'usuario' in session:
         return redirect(url_for('dashboard'))
@@ -145,62 +158,49 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/dashboard')
+@login_requerido
 def dashboard():
     if 'usuario' not in session:
         return redirect(url_for('login'))
-    return render_template('dashboard.html')
 
-@app.route('/ver_alarmas')
-def ver_alarmas():
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
-    
-    # Buscar en múltiples ubicaciones
-    posibles_rutas = [
-        '/home/fedealon/Desktop/Proyecto-HIPS/alarmas.log',
-        PATHS.get('log_alarmas', '')
-    ]
-    
-    contenido = []
-    for ruta in posibles_rutas:
+    # Alarmas
+    alarmas = []
+    for ruta in [PATHS.get('log_alarmas', '')]:
         if ruta and os.path.exists(ruta):
             try:
                 with open(ruta, 'r') as f:
-                    contenido = f.readlines()
+                    alarmas = f.readlines()[-10:]  # Últimas 10 líneas
                 break
-            except Exception as e:
+            except:
                 continue
-    
-    if not contenido:
-        contenido = ["No se pudo leer ningún archivo de alarmas."]
-    
-    return render_template('alarmas.html', log=contenido)
 
-@app.route('/ver_prevencion')
-def ver_prevencion():
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
-    
-    # Buscar en múltiples ubicaciones
-    posibles_rutas = [
-        '/home/fedealon/Desktop/Proyecto-HIPS/prevencion.log',
-        PATHS.get('log_prevencion', '')
-    ]
-    
-    contenido = []
-    for ruta in posibles_rutas:
+    # Prevención
+    prevenciones = []
+    for ruta in [PATHS.get('log_prevencion', '')]:
         if ruta and os.path.exists(ruta):
             try:
                 with open(ruta, 'r') as f:
-                    contenido = f.readlines()
+                    prevenciones = f.readlines()[-10:]
                 break
-            except Exception as e:
+            except:
                 continue
-    
-    if not contenido:
-        contenido = ["No se pudo leer ningún archivo de prevenciones."]
-    
-    return render_template('prevencion.html', log=contenido)
+
+    # Correos
+    correos = []
+    for ruta in [PATHS.get('log_alarmas', '')]:
+        if ruta and os.path.exists(ruta):
+            try:
+                with open(ruta, 'r') as f:
+                    for linea in f:
+                        if any(palabra in linea.lower() for palabra in ["detectado", "correo", "ram", "password", "shadow", "http", "ddos", "cron", "tmp", "mail", "mails"]):
+                            correos.append(linea.strip())
+                    correos = correos[-10:]
+                break
+            except:
+                continue
+
+    return render_template('dashboard.html', alarmas=alarmas, prevenciones=prevenciones, correos=correos)
+
 
 @app.route('/graficos')
 def graficos():
@@ -208,22 +208,15 @@ def graficos():
         return redirect(url_for('login'))
 
     fechas = {}
-    
-    # Buscar archivo de alarmas
+
     posibles_rutas = [
         '/home/fedealon/Desktop/Proyecto-HIPS/alarmas.log',
         PATHS.get('log_alarmas', '')
     ]
-    
-    archivo_encontrado = None
+
     for ruta in posibles_rutas:
         if ruta and os.path.exists(ruta):
-            archivo_encontrado = ruta
-            break
-    
-    if archivo_encontrado:
-        try:
-            with open(archivo_encontrado, 'r') as f:
+            with open(ruta, 'r') as f:
                 for linea in f:
                     if "::" in linea:
                         fecha = linea.split("::")[0].strip()
@@ -233,30 +226,29 @@ def graficos():
                             fechas[clave] = fechas.get(clave, 0) + 1
                         except:
                             continue
-        except:
-            fechas = {"Sin datos": 1}
+            break
     else:
         fechas = {"Sin archivo": 1}
 
-    # Ordenar las fechas
     try:
         fechas_ordenadas = dict(sorted(
             fechas.items(),
-            key=lambda x: datetime.datetime.strptime(x[0], "%d/%m") if x[0] not in ["Sin datos", "Sin archivo"] else datetime.datetime.min
+            key=lambda x: datetime.datetime.strptime(x[0], "%d/%m")
+            if x[0] not in ["Sin datos", "Sin archivo"]
+            else datetime.datetime.min
         ))
     except:
         fechas_ordenadas = fechas
 
-    # Crear gráfico
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.bar(fechas_ordenadas.keys(), fechas_ordenadas.values(), color='#00ff88', edgecolor='black')
-    ax.set_title("📊 Alarmas por Día", fontsize=14)
+    ax.plot(list(fechas_ordenadas.keys()), list(fechas_ordenadas.values()), 
+            color='#121212', marker='o', linestyle='-', linewidth=2,markersize=8  )
+    ax.set_title("Alarmas por Día", fontsize=14)
     ax.set_ylabel("Cantidad", fontsize=12)
     ax.set_xlabel("Fecha", fontsize=12)
     plt.xticks(rotation=45)
     plt.grid(axis='y', linestyle='--', alpha=0.5)
 
-    # Exportar imagen
     img = io.BytesIO()
     plt.tight_layout()
     plt.savefig(img, format='png')
@@ -265,32 +257,7 @@ def graficos():
 
     return send_file(img, mimetype='image/png')
 
-@app.route('/correos')
-def correos():
-    if 'usuario' not in session:
-        return redirect(url_for('login'))
 
-    historial = []
-    posibles_rutas = [
-        '/home/fedealon/Desktop/Proyecto-HIPS/alarmas.log',
-        PATHS.get('log_alarmas', '')
-    ]
-    
-    for ruta in posibles_rutas:
-        if ruta and os.path.exists(ruta):
-            try:
-                with open(ruta, 'r') as f:
-                    for linea in f:
-                        if any(palabra in linea.lower() for palabra in ["detectado", "correo", "ram", "password", "shadow", "http", "ddos", "cron", "tmp", "mail", "mails"]):
-                            historial.append(linea.strip())
-                break
-            except Exception as e:
-                continue
-    
-    if not historial:
-        historial = ["No se pudo leer el archivo o no hay eventos relacionados con correo."]
-
-    return render_template('correos.html', correos=historial)
 
 @app.route('/modulos', methods=['GET', 'POST'])
 def modulos():
