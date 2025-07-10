@@ -9,7 +9,7 @@ from collections import defaultdict
 UTILS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'utils'))
 if UTILS_PATH not in sys.path:
     sys.path.append(UTILS_PATH)
-from configuracion import PATHS, EMAIL, ESCANEO  # Ajustar si tu usuario no es kali
+from configuracion import PATHS, EMAIL, ESCANEO 
 
 from registrar_log import registrar_alarma, registrar_prevencion
 from enviar_mail import enviar_alerta
