@@ -28,7 +28,7 @@ def detectar_ddos():
                 cuerpo = registrar_alarma("Posible DDoS", ip, f"{cantidad} solicitudes DNS")
                 enviar_alerta(
                     destinatario=EMAIL['destinatario'],
-                    asunto="🚨 Alerta HIPS: Ataque DDoS detectado",
+                    asunto=" Alerta HIPS: Ataque DDoS detectado",
                     cuerpo=cuerpo
                 )
 

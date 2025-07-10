@@ -26,3 +26,4 @@ def registrar_prevencion(accion, ip='-', detalle=''):
         print(linea.strip())
     except Exception as e:
         print(f"Error al registrar prevención: {e}")
+

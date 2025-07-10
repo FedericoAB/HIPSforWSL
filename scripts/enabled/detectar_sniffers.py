@@ -30,7 +30,7 @@ def detectar_y_prevenir_sniffers():
                 cuerpo = registrar_alarma("Sniffer Detectado", "-", f"Proceso: {nombre}")
                 enviar_alerta(
                     destinatario=EMAIL['destinatario'],
-                    asunto="🚨 Alerta HIPS: Sniffer Detectado",
+                    asunto="Alerta HIPS: Sniffer Detectado",
                     cuerpo=cuerpo
                 )
                 try:

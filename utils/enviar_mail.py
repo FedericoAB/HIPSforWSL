@@ -25,3 +25,4 @@ def enviar_alerta(destinatario, asunto, cuerpo):
         print("Correo enviado al administrador.")
     except Exception as e:
         print(f"Error al enviar correo: {e}")
+

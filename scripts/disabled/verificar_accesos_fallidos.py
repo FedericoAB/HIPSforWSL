@@ -26,7 +26,7 @@ def obtener_intentos_fallidos():
                         cuerpo = registrar_alarma("Intento fallido de acceso", ip, "SSH - Failed password")
                         enviar_alerta(
                             destinatario=EMAIL['destinatario'],
-                            asunto="🚨 Alerta HIPS: Intento fallido de acceso",
+                            asunto="Alerta HIPS: Intento fallido de acceso",
                             cuerpo=cuerpo
                         )
                         ips_detectadas.add(ip)

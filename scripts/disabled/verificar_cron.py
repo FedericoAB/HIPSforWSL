@@ -30,7 +30,7 @@ def revisar_lineas_cron(lineas, fuente):
                 cuerpo = registrar_alarma("Tarea cron sospechosa", "-", f"{linea.strip()} [{fuente}]")
                 enviar_alerta(
                     destinatario=EMAIL['destinatario'],
-                    asunto="🚨 Alerta HIPS: Cron sospechoso",
+                    asunto=" Alerta HIPS: Cron sospechoso",
                     cuerpo=cuerpo
                 )
 

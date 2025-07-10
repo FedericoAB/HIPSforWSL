@@ -37,7 +37,7 @@ def detectar_accesos_repetidos():
                 cuerpo = registrar_alarma("Accesos fallidos desde IP repetida", ip, f"{count} intentos fallidos")
                 enviar_alerta(
                     destinatario=EMAIL['destinatario'],
-                    asunto="🚨 Alerta HIPS: IP con múltiples intentos de acceso",
+                    asunto=" Alerta HIPS: IP con múltiples intentos de acceso",
                     cuerpo=cuerpo
                 )
 
@@ -46,7 +46,7 @@ def detectar_accesos_repetidos():
                 cuerpo = registrar_alarma("Accesos fallidos al usuario", "-", f"{user} recibió {count} intentos")
                 enviar_alerta(
                     destinatario=EMAIL['destinatario'],
-                    asunto="🚨 Alerta HIPS: Usuario atacado repetidamente",
+                    asunto=" Alerta HIPS: Usuario atacado repetidamente",
                     cuerpo=cuerpo
                 )
 

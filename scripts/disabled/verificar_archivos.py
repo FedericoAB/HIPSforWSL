@@ -81,7 +81,7 @@ def verificar_integridad():
                 try:
                     enviar_alerta(
                         destinatario=EMAIL['destinatario'],
-                        asunto="🚨 Alerta HIPS: Archivo Crítico Modificado",
+                        asunto=" Alerta HIPS: Archivo Crítico Modificado",
                         cuerpo=cuerpo
                     )
                 except Exception as e:

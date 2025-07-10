@@ -33,16 +33,16 @@ def analizar_tmp():
             ruta = os.path.join(directorio_tmp, archivo)
             if os.path.isfile(ruta):
                 for ext in extensiones:
-                    if archivo.endswith(ext):
+                    if archivo.endswith(tuple(extensiones)) or es_script(ruta):
                         cuerpo = registrar_alarma("Archivo sospechoso en /tmp", "-", f"Archivo: {archivo}")
                         enviar_alerta(
                             destinatario=EMAIL['destinatario'],
-                            asunto="🚨 Alerta HIPS: Archivo sospechoso en /tmp",
+                            asunto="Alerta HIPS: Archivo sospechoso en /tmp",
                             cuerpo=cuerpo
                         )
                         nuevo_destino = mover_a_cuarentena(ruta)
                         registrar_prevencion("Archivo movido a cuarentena", "-", f"{nuevo_destino}")
-                        break
+
     except Exception as e:
         print(f"Error al analizar /tmp: {e}")
 

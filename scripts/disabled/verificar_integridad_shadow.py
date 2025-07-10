@@ -21,7 +21,7 @@ def obtener_hash_actual():
         hash_actual = resultado.strip().split()[0]
         return hash_actual
     except Exception as e:
-        print(f"❌ Error al calcular hash actual: {e}")
+        print(f" Error al calcular hash actual: {e}")
         return None
 
 def leer_hash_original():
@@ -30,7 +30,7 @@ def leer_hash_original():
             hash_guardado = f.readline().strip().split()[0]
             return hash_guardado
     except Exception as e:
-        print(f"❌ Error al leer hash guardado: {e}")
+        print(f" Error al leer hash guardado: {e}")
         return None
 
 def verificar_integridad():
@@ -44,14 +44,14 @@ def verificar_integridad():
         mensaje = "El archivo /etc/shadow fue modificado."
         registrar_alarma("Modificación de archivo crítico", "-", mensaje)
         enviar_mail(mensaje)
-        print("🚨 Hash modificado - se registró alarma y se envió mail.")
+        print("Hash modificado - se registró alarma y se envió mail.")
     else:
-        print("✅ El archivo /etc/shadow está íntegro.")
+        print(" El archivo /etc/shadow está íntegro.")
 
 def enviar_mail(mensaje):
     enviar_alerta(
         destinatario=EMAIL['destinatario'],
-        asunto="🚨 Alerta HIPS: Modificación en archivo crítico",
+        asunto="Alerta HIPS: Modificación en archivo crítico",
         cuerpo=mensaje
     )
 

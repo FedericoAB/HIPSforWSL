@@ -26,7 +26,7 @@ def cambiar_contrasena(usuario):
         comando = f"echo '{usuario}:{nueva_pass}' | sudo chpasswd"
         subprocess.run(comando, shell=True, check=True)
         registrar_alarma("Contraseña cambiada", "-", f"Se cambió la contraseña de {usuario} por spam.")
-        print(f"🔒 Contraseña cambiada para {usuario}")
+        print(f" Contraseña cambiada para {usuario}")
     except Exception as e:
         registrar_alarma("Error al cambiar contraseña", "-", str(e))
 
@@ -53,7 +53,7 @@ def analizar_mails_desde_journal():
         if resumen:
             enviar_alerta(
                 destinatario=EMAIL['destinatario'],
-                asunto="🚨 Alerta HIPS: Actividad de correo sospechosa",
+                asunto=" Alerta HIPS: Actividad de correo sospechosa",
                 cuerpo=f"Se detectaron usuarios con envío excesivo de mails:\n\n{resumen}"
             )
 

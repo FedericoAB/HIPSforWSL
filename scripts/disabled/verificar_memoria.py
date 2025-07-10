@@ -26,7 +26,7 @@ def detectar_ram_excesiva():
                 cuerpo = registrar_alarma("RAM excesiva", "-", detalle)
                 enviar_alerta(
                     destinatario=EMAIL['destinatario'],
-                    asunto="🚨 Alerta HIPS: Uso excesivo de RAM",
+                    asunto="Alerta HIPS: Uso excesivo de RAM",
                     cuerpo=cuerpo
                 )
                 os.kill(pid, 9)
