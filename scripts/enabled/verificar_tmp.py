@@ -47,16 +47,17 @@ def analizar_tmp():
     except Exception as e:
         print(f"Error al analizar /tmp: {e}")
 
-
-def calcular_md5(ruta_archivo):
+def obtener_hash_md5(ruta_archivo):
     hash_md5 = hashlib.md5()
-    with open(ruta_archivo, "rb") as f:
+    with open(ruta_archivo, 'rb') as f:
         for bloque in iter(lambda: f.read(4096), b""):
             hash_md5.update(bloque)
     return hash_md5.hexdigest()
+
 def verificar_integridad(ruta_archivo, hash_esperado):
-    hash_actual = calcular_md5(ruta_archivo)
+    hash_actual = obtener_hash_md5(ruta_archivo)
     return hash_actual == hash_esperado
+
 
 if __name__ == "__main__":
     analizar_tmp()
